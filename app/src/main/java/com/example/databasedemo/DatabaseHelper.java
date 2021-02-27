@@ -1,0 +1,65 @@
+package com.example.databasedemo;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import androidx.annotation.Nullable;
+
+public class DatabaseHelper extends SQLiteOpenHelper {
+    public static final String DATABASE = "college";
+    public static final String TABLE = "student";
+    public static final String COL_1 = "id";
+    public static final String COL_2 = "name";
+    public static final String COL_3= "surname";
+    public static final String COL_4= "marks";
+
+
+
+    public DatabaseHelper(@Nullable Context context) {
+        super(context, TABLE, null, 1);
+
+    }
+
+
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        String sql = "create table if not exists " + TABLE + "(id integer " +
+                "primary key autoincrement, name text, surname text, marks integer)";
+        db.execSQL(sql);
+
+
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("drop table " + TABLE);
+        onCreate(db);
+    }
+    public boolean insertData(String name, String surname, String marks){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COL_3,surname);
+        values.put(COL_4,marks);
+        values.put(COL_2,name);
+        // insert into TABLE (name,surname,marks) values ("xyz","ABC",75);
+        long result =  db.insert(TABLE,null,values);
+        return (result == -1)?false:true;
+    }
+    public Cursor selectData() {
+        SQLiteDatabase db = getWritableDatabase();
+        //select * from Table
+
+        return db.query(TABLE,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+    }
+}
